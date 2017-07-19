@@ -7,11 +7,23 @@
 
     <import resource="webflow.xml"/>
     <context:component-scan base-package="com.library"/>
-    <mvc:resources mapping="/resources" location="/resources/**"/>
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
 
     <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
         <property name="flowRegistry" ref="flowRegistry"/>
+        <property name="order" value="2"/>
     </bean>
+
+    <bean name="resourceHandlerJSF" class="org.springframework.faces.webflow.JsfResourceRequestHandler"/>
+
+<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="order" value="1"/>
+    <property name="mappings">
+        <value>
+            /javax.faces.resource/**=resourceHandlerJSF
+        </value>
+    </property>
+</bean>
 
     <bean class="org.springframework.faces.webflow.JsfFlowHandlerAdapter">
         <property name="flowExecutor" ref="flowExecutor"/>
@@ -26,10 +38,6 @@
     <bean id="msg" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basename" value="/WEB-INF/locales/messages"/>
         <property name="defaultEncoding" value="UTF-8"/>
-    </bean>
-
-    <bean id="localResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
-        <property name="defaultLocale" value="ru"/>
     </bean>
 
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
@@ -51,5 +59,18 @@
     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="ru"/>
+    </bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+                <property name="paramName" value="lang"/>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 </beans>
