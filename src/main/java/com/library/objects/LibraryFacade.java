@@ -4,12 +4,15 @@ import com.library.dao.interfaces.BookDao;
 import com.library.entities.Author;
 import com.library.entities.Book;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Scope("singleton")
 public class LibraryFacade {
+    private static final String FIELD_CONTENT = "content";
 
     @Autowired
     private BookDao bookDao;
@@ -41,4 +44,9 @@ public class LibraryFacade {
                 break;
         }
     }
+
+    public byte[] getContent(long id){
+        return (byte[])bookDao.getFieldValue(id, FIELD_CONTENT);
+    }
+
 }

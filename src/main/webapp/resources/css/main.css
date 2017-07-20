@@ -171,7 +171,7 @@ body {
 
 
 #loading_wrapper{
-    width: 100%;
+    width: 100%;  
     text-align: center;
     position: fixed;
     display: block;
@@ -389,3 +389,4 @@ body {
 .left-menu li:hover{
     background-color: #ceeefb;
 }
+
